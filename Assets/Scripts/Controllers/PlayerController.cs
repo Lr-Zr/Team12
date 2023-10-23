@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using TMPro;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 /*
@@ -37,10 +39,17 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     float fspeed = 10.0f;
+
+
+    Vector3 _destPos;
+    bool _movetodest = false;
+
     void Start()
     {
         Managers.Input.KeyAction -= OnKeyboard; //2번씩걸리는경우생김
         Managers.Input.KeyAction += OnKeyboard;//인풋매니저한테 어떤 키가 눌리면 이함수를 실행;
+        Managers.Input.MouseAction -= OnMouseClicked;
+        Managers.Input.MouseAction += OnMouseClicked;
 
     }
 
@@ -62,8 +71,37 @@ public class PlayerController : MonoBehaviour
         //transform.Rotate(new Vector3(0.0f, Time.deltaTime * 100.0f, 0.0f));
         //quaternion
         //transform.rotation = Quaternion.Euler(new Vector3(0.0f, fAngle, 0.0f));
-    
 
+
+
+
+
+        if(_movetodest)
+        {
+            Vector3 dir = _destPos-transform.position;
+            if(dir.magnitude<0.0001f)//크기가 매우 작아졌을때 도착했다는 상태
+            {
+                _movetodest=false;
+            }else
+            {
+                //첫번째 방법
+                //float moveDist = fspeed * Time.deltaTime;
+                //if(moveDist>=dir.magnitude)
+                //{
+                //    moveDist = dir.magnitude;
+                //}
+                //<<<
+                //두번째 방법
+                float moveDist = Mathf.Clamp(fspeed * Time.deltaTime, 0, dir.magnitude);
+
+                //<<<
+
+                transform.position += dir.normalized * moveDist;
+                transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), 10*Time.deltaTime);
+                transform.LookAt(_destPos);
+
+            }
+        }
     }
 
 
@@ -110,6 +148,27 @@ public class PlayerController : MonoBehaviour
             transform.position += Vector3.right * Time.deltaTime * fspeed;
             //transform.Translate(Vector3.fwd * Time.deltaTime * fspeed);
             //transform.position += transform.TransformDirection(new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime);
+        }
+        _movetodest = false;
+    }
+
+    void OnMouseClicked(Define.MouseEvent evt)
+    {
+        if (evt != Define.MouseEvent.Click)
+        {
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(Camera.main.transform.position, ray.direction * 100f, Color.green, 3f);
+
+        LayerMask mask = LayerMask.GetMask("Wall");
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100f, mask))
+        {
+            _destPos = hit.point;
+            _movetodest = true;
         }
     }
 }

@@ -48,7 +48,7 @@ public class TestCol : MonoBehaviour
 
             Debug.DrawRay(Camera.main.transform.position, ray.direction * 100f, Color.green, 3f);
 
-            int mask = (1 << 8) + (1<<9); //레이어마스크
+           // int mask = (1 << 8) + (1<<9); //레이어마스크
             LayerMask mask = LayerMask.GetMask("Monster");
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100f,mask))
