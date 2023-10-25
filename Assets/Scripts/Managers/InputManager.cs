@@ -34,6 +34,14 @@ public class InputManager
                 _pressed = false;
 
             }
+            if (Input.GetMouseButton(1))
+            {
+                MouseAction.Invoke(Define.MouseEvent.Press);
+            }
+            else
+            {
+
+            }
         }
     }
 }
