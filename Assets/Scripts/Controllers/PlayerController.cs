@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
+using Photon.Pun;
+using Photon.Realtime;
+
 /*
 struct MyVector
 {
@@ -33,7 +36,7 @@ struct MyVector
     }
 }
 */
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     [SerializeField]
     float fspeed = 10.0f;
@@ -42,8 +45,10 @@ public class PlayerController : MonoBehaviour
     Vector3 _destPos;
     bool _movetodest = false;
 
+    PhotonView pv; 
     void Start()
     {
+        pv= GetComponent<PhotonView>();
         Managers.Input.KeyAction -= OnKeyboard; //2번씩걸리는경우생김
         Managers.Input.KeyAction += OnKeyboard;//인풋매니저한테 어떤 키가 눌리면 이함수를 실행;
         Managers.Input.MouseAction -= OnMouseClicked;
@@ -51,9 +56,10 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    float fAngle = 0.0f;
+    //float fAngle = 0.0f;
     void Update()
     {
+     
         //fAngle += Time.deltaTime * fspeed;
         //Local->World
         //transform.TransformDirection
@@ -69,10 +75,6 @@ public class PlayerController : MonoBehaviour
         //transform.Rotate(new Vector3(0.0f, Time.deltaTime * 100.0f, 0.0f));
         //quaternion
         //transform.rotation = Quaternion.Euler(new Vector3(0.0f, fAngle, 0.0f));
-
-
-
-
 
         if(_movetodest)
         {
@@ -105,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
     void OnKeyboard()
     {
+        if (!pv.IsMine) return;
         if (Input.GetKey(KeyCode.W))
         {
 
@@ -152,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     void OnMouseClicked(Define.MouseEvent evt)
     {
-        if (evt != Define.MouseEvent.Click)
+        if (evt != Define.MouseEvent.Click&&!pv.IsMine)
         {
             return;
         }
@@ -167,6 +170,18 @@ public class PlayerController : MonoBehaviour
         {
             _destPos = hit.point;
             _movetodest = true;
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+
+        }
+        else
+        {
+
         }
     }
 }

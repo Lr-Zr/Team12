@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+using Photon.Pun;
+using Photon.Realtime;
+
 public class Managers : MonoBehaviour
 {
 
@@ -23,7 +26,9 @@ public class Managers : MonoBehaviour
     {
         //Instance = this;
         Init();
+
         
+
     }
     void Update()
     {

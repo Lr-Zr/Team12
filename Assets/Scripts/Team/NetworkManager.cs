@@ -43,7 +43,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     /* 방에 접속을 시도 */
-   public void Connect()
+    public void Connect()
     {
         /* 클릭 후 중복 시도 방지 */
         _joinBtn.interactable = false;
@@ -65,15 +65,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         _connectionInfo.text = "새로운 방 생성중 ..";
+        Debug.Log($"방 생성 중 ");
         PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 2 });
-    
+
     }
 
-
+    /* 방 접속 성공 */
     public override void OnJoinedRoom()
     {
         /* 방 접속 상태 표시 */
         _connectionInfo.text = "방 참가 성공 ";
+
+        /* Scene 변경 */
         PhotonNetwork.LoadLevel("Test1");
+        //PhotonNetwork.Instantiate("Prefabs/unitychan", Vector3.zero, Quaternion.identity);
+
     }
 }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +18,8 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-
+        _player =PhotonNetwork.Instantiate("Prefabs/unitychan", Vector3.zero, Quaternion.identity);
+        
     }
 
 
@@ -40,11 +42,9 @@ public class CameraController : MonoBehaviour
                 //덜덜 떨리는 현상 . 카메라가 이동, 플레이어가 이동 차이. -> 해결법 LateUpdate()
             }
 
-            
-
-
 
         }
+      
     }
 
     public void SetQuaterView(Vector3 delta)
