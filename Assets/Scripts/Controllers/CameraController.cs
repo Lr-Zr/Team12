@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        _player =PhotonNetwork.Instantiate("Prefabs/unitychan", Vector3.zero, Quaternion.identity);
+        //_player =PhotonNetwork.Instantiate("Prefabs/unitychan", Vector3.zero, Quaternion.identity);
         
     }
 

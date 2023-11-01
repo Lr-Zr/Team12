@@ -48,14 +48,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     PhotonView pv; 
     void Start()
     {
-        pv= GetComponent<PhotonView>();
+      //  pv= GetComponent<PhotonView>();
         Managers.Input.KeyAction -= OnKeyboard; //2번씩걸리는경우생김
         Managers.Input.KeyAction += OnKeyboard;//인풋매니저한테 어떤 키가 눌리면 이함수를 실행;
         Managers.Input.MouseAction -= OnMouseClicked;
         Managers.Input.MouseAction += OnMouseClicked;
 
     }
-
+    float _waittorun;
     //float fAngle = 0.0f;
     void Update()
     {
@@ -102,12 +102,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             }
         }
+
+        if(_movetodest)
+        {
+            _waittorun = Mathf.Lerp(_waittorun, 1,20.0f*Time.deltaTime);
+            Animator anim = GetComponent<Animator>();
+            anim.SetFloat("wait_run_ratio", 1);
+            anim.Play("WAIT_RUN");
+        }
+        else
+        {
+            _waittorun = Mathf.Lerp(_waittorun, 0, 20.0f * Time.deltaTime);
+            Animator anim = GetComponent<Animator>();
+            anim.SetFloat("wait_run_ratio", 0);
+             anim.Play("WAIT_RUN");
+            
+        }
     }
 
 
     void OnKeyboard()
     {
-        if (!pv.IsMine) return;
+     //   if (!pv.IsMine) return;
         if (Input.GetKey(KeyCode.W))
         {
 
@@ -155,7 +171,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     void OnMouseClicked(Define.MouseEvent evt)
     {
-        if (evt != Define.MouseEvent.Click&&!pv.IsMine)
+        if (evt != Define.MouseEvent.Click)
         {
             return;
         }
@@ -171,6 +187,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             _destPos = hit.point;
             _movetodest = true;
         }
+
+
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
