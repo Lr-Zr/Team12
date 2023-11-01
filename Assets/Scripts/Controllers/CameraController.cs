@@ -10,10 +10,10 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     Vector3 _delta = new Vector3(0.0f, 6.0f, -5.0f);//플레이어와 카메라 거리
-
+    
 
     [SerializeField]
-    GameObject _player;
+    public GameObject _player;
 
 
     void Start()
@@ -25,6 +25,7 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (_player == null) return;
         if (_mode == Define.CameraMode.QuerterView)
         {
             RaycastHit hit;

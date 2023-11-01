@@ -47,6 +47,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         /* 클릭 후 중복 시도 방지 */
         _joinBtn.interactable = false;
+        _joinBtn.transform.parent.gameObject.SetActive(false);
+        
         if (PhotonNetwork.IsConnected)
         {
             _connectionInfo.text = "방에 접속중..";
@@ -77,8 +79,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         _connectionInfo.text = "방 참가 성공 ";
 
         /* Scene 변경 */
-        PhotonNetwork.LoadLevel("Test1");
-        //PhotonNetwork.Instantiate("Prefabs/unitychan", Vector3.zero, Quaternion.identity);
+        //PhotonNetwork.LoadLevel("Test1");
 
+        Camera.main.GetComponent<CameraController>()._player= PhotonNetwork.Instantiate("Prefabs/Testchan", Vector3.zero, Quaternion.identity);
     }
 }
