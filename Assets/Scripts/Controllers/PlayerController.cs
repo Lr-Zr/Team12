@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     //float fAngle = 0.0f;
     void Update()
     {
-     
+        
         //fAngle += Time.deltaTime * fspeed;
         //Local->World
         //transform.TransformDirection
@@ -187,8 +187,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             _destPos = hit.point;
             _movetodest = true;
         }
-
-
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

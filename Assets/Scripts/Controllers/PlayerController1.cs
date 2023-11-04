@@ -41,7 +41,8 @@ public class PlayerController1 : MonoBehaviourPun, IPunObservable
     [SerializeField]
     float fspeed = 10.0f;
     [SerializeField]
-    public float power = 10.0f;
+    public Vector3 _powervector;
+
 
     Vector3 _destPos;
     bool _movetodest = false;
